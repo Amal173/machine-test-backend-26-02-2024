@@ -1,5 +1,4 @@
 const asyncHandler = require('express-async-handler')
-
 const Stages = require('../models/stagesModels')
 
 
@@ -14,6 +13,32 @@ const getStages = asyncHandler(async (req, res) => {
 
     res.status(200).json({ stage })
 });
+
+const getOneStages = asyncHandler(async (req, res) => {
+    const id=req.params.id
+    const stage = await Stages.findById(id)
+
+    if (!stage) {
+        res.status(404);
+        throw new Error("stage not found");
+    }
+
+    res.status(200).json({ stage })
+});
+
+const updateStage = asyncHandler(async (req, res) => {
+    const id=req.params.id
+    const {stages}=req.body
+    console.log(stages);
+    console.log(req.body);
+        const tasks = await Stages.findByIdAndUpdate(id,{stage:stages})
+        if (!tasks) {
+            res.status(404);
+            throw new Error("tasks not found");
+        }
+    
+        res.status(200).json({ tasks })
+    });
 
 
 const createStages = asyncHandler(async (req, res) => {
@@ -46,4 +71,4 @@ const DeleteStage = asyncHandler(async (req, res) => {
     res.status(200).json({ stage })
 });
 
-module.exports = { getStages, createStages, DeleteStage }
+module.exports = { getStages, createStages, DeleteStage ,getOneStages,updateStage}
