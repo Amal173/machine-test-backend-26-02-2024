@@ -8,6 +8,7 @@ const app = express();
 app.use(cors())
 app.use(express.json());
 app.use('/tasks' , require('./Router/taskRouter'))
+app.use('/stages' , require('./Router/stagesRouter'))
 
 app.listen(port, () => {
     console.log(`Server Started at ${port}`)
