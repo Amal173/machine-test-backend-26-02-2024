@@ -6,10 +6,10 @@ const stagesSchema = new mongoose.Schema({
         type: String,
         // default: ["todo","in-progress","done"]
     },
-    // userId: {
-    //     required: true,
-    //     type: String
-    // },
+    projectId: {
+        required: true,
+        type: String
+    },
 
 })
 

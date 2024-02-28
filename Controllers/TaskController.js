@@ -3,15 +3,21 @@ const task=require("../models/taskModels")
 
 
 const getTask = asyncHandler(async (req, res) => {
-
-    const tasks = await task.find()
+try {
+    const tasks = await task.aggregate([{
+        $match:{projectId:req.params.id}
+    }])
 
     if (!tasks) {
         res.status(404);
         throw new Error("tasks not found");
     }
-
     res.status(200).json({ tasks })
+} catch (error) {
+    res.status(500).json({error:error.message})
+}
+
+
 });
 
 
@@ -43,7 +49,7 @@ console.log(req.body);
 
 
 const createTask = asyncHandler(async (req, res) => {
-console.log(req.body);
+
     const tasks = await task.create(req.body)
 
     if (!tasks) {
@@ -59,18 +65,17 @@ const updateTaskStatus = asyncHandler(async (req, res) => {
     const { newStatus } = req.body;
 
     try {
-        // Find the task by ID and update its status
+     
         const updatedTask = await task.findByIdAndUpdate(id, { status: newStatus }, { new: true });
 
-        // If the task was found and updated
         if (updatedTask) {
             res.json({ success: true, updatedTask });
         } else {
-            // If the task was not found
+         
             res.status(404).json({ error: 'Task not found' });
         }
     } catch (error) {
-        // If an error occurred during the update process
+     
         res.status(500).json({ error: 'Internal server error' });
     }
 });

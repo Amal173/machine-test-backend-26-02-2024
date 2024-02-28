@@ -17,6 +17,10 @@ const taskSchema = new mongoose.Schema({
         required: true,
         type: String
     },
+    projectId: {
+        required: true,
+        type: String
+    },
     createdOn: {
         default:Date(),
         required: true,
