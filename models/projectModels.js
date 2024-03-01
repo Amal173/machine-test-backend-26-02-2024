@@ -9,6 +9,10 @@ const projectSchema = new mongoose.Schema({
         required: true,
         type: String
     },
+    userId: {
+        required: true,
+        type: String
+    },
     createdOn: {
         default:Date(),
         required: true,

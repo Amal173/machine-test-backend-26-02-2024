@@ -1,10 +1,18 @@
 const asyncHandler = require('express-async-handler')
 const Project = require('../models/projectModels')
-const stage=require("./../models/stagesModels")
+const stage = require("./../models/stagesModels")
+const users = require('../models/userModels')
 
 const getProject = asyncHandler(async (req, res) => {
-
-    const project = await Project.find()
+    let project;
+    const user = await users.findById(req.params.id)
+    if (user.role === "Admin") {
+        project = await Project.find()
+    } else {
+        project = await Project.aggregate([{
+            $match: { userId: req.params.id }
+        }])
+    }
 
     if (!project) {
         res.status(404);
@@ -44,9 +52,9 @@ const createProject = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error("project not found");
     }
-    const stages=["todo","in-progress","done"]
-    for(const Stage of stages){
-        await stage.create({projectId:project._id,stage:Stage})
+    const stages = ["todo", "in-progress", "done"]
+    for (const Stage of stages) {
+        await stage.create({ projectId: project._id, stage: Stage })
 
     }
     res.status(200).json({ project })

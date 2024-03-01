@@ -4,7 +4,6 @@ const stagesSchema = new mongoose.Schema({
     stage: {
         required: true,
         type: String,
-        // default: ["todo","in-progress","done"]
     },
     projectId: {
         required: true,
