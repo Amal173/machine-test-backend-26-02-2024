@@ -5,11 +5,13 @@ const cors = require("cors")
 const { connectDb } = require("./config/dbConnection")
 connectDb()
 const app = express();
+const allowedOrigin = process.env.FRONTEND_ORIGIN || 'http://localhost:3000'; 
 app.use(cors({
-    origin: ["http://localhost:3000"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-}))
+    origin: allowedOrigin,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+}));
+
 app.use(express.json());
 app.use('/tasks', require('./Router/taskRouter'))
 app.use('/stages', require('./Router/stagesRouter'))
