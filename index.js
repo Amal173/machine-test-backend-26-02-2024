@@ -6,11 +6,20 @@ const { connectDb } = require("./config/dbConnection")
 connectDb()
 const app = express();
 const allowedOrigin = process.env.FRONTEND_ORIGIN || 'http://localhost:3000'; 
+
+
 app.use(cors({
-    origin: allowedOrigin,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigin.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
 }));
+
 
 app.use(express.json());
 app.use('/tasks', require('./Router/taskRouter'))
