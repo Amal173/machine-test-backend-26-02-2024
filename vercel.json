@@ -1,0 +1,29 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "index.js", 
+        "use": "@vercel/node"
+      }
+    ],
+    "headers": [
+      {
+        "source":  "/(.*)", 
+        "headers": [
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "https://machine-test-frontend-26-02-2024-gzxo.vercel.app" 
+          },
+          {
+            "key": "Access-Control-Allow-Methods",
+            "value": "GET, POST, PUT, DELETE, OPTIONS" 
+          },
+          {
+            "key": "Access-Control-Allow-Headers",
+            "value": "Content-Type, Authorization, X-Requested-With"
+          }
+        ]
+      }
+    ]
+  }
+  
