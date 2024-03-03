@@ -5,14 +5,11 @@ const cors = require("cors")
 const { connectDb } = require("./config/dbConnection")
 connectDb()
 const app = express();
-
-app.use( cors({
-    origin: '*',
-    methods: '*',
-    allowedHeaders: ['Content-Type', 'Authorization'],
+app.use(cors({
+    origin: ["http://localhost:3000","https://machine-test-frontend-26-02-2024-gzxo.vercel.app"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
-  }));
-
+}))
 app.use(express.json());
 app.use('/tasks', require('./Router/taskRouter'))
 app.use('/stages', require('./Router/stagesRouter'))
