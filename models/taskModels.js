@@ -19,7 +19,7 @@ const taskSchema = new mongoose.Schema({
     },
     projectId: {
         required: true,
-        type: String
+        type: mongoose.Schema.Types.ObjectId
     },
     createdOn: {
         default:Date(),
@@ -28,4 +28,4 @@ const taskSchema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('testTask', taskSchema)
+module.exports = mongoose.model('testTasks', taskSchema)

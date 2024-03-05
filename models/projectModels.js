@@ -11,7 +11,7 @@ const projectSchema = new mongoose.Schema({
     },
     userId: {
         required: true,
-        type: String
+        type: mongoose.Schema.Types.ObjectId
     },
     createdOn: {
         default:Date(),

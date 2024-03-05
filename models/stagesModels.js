@@ -7,7 +7,7 @@ const stagesSchema = new mongoose.Schema({
     },
     projectId: {
         required: true,
-        type: String
+        type: mongoose.Schema.Types.ObjectId
     },
 
 })

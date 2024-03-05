@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const Project = require('../models/projectModels');
 const stage = require("./../models/stagesModels");
 const users = require('../models/userModels');
+const mongoose = require('mongoose');
 
 const getProject = asyncHandler(async (req, res) => {
     try {
@@ -11,18 +12,36 @@ const getProject = asyncHandler(async (req, res) => {
             res.status(404);
             throw new Error("User not found");
         }
-        
         if (user.role === "Admin") {
-            project = await Project.find();
+            project = await Project.aggregate([
+                {
+                    $lookup: {
+                        from: "user",
+                        localField: "_id",
+                        foreignField: "userId",
+                        as: "user"
+                    }
+                }
+            ]);
         } else {
-            project = await Project.aggregate([{
-                $match: { userId: req.params.id }
-            }]);
+            project = await Project.aggregate([
+                {
+                    $match: { userId:new mongoose.Types.ObjectId(req.params.id) }
+                },
+                {
+                    $lookup: {
+                        from: "user",
+                        localField: "_id",
+                        foreignField: "userId",
+                        as: "user"
+                    }
+                }
+            ]);
         }
-
+        
         if (!project) {
             res.status(404);
-            throw new Error("Project not found");
+            throw new Error("Projects not found");
         }
 
         res.status(200).json({ project });
@@ -30,6 +49,7 @@ const getProject = asyncHandler(async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+
 
 const getOneProject = asyncHandler(async (req, res) => {
     try {
@@ -51,7 +71,7 @@ const updateProject = asyncHandler(async (req, res) => {
     try {
         const id = req.params.id;
         const project = await Project.findByIdAndUpdate(id, req.body);
-        
+
         if (!project) {
             res.status(404);
             throw new Error("Project not found");

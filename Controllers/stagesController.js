@@ -1,10 +1,11 @@
 const asyncHandler = require('express-async-handler');
 const Stages = require('../models/stagesModels');
+const mongoose = require('mongoose');
 
 const getStages = asyncHandler(async (req, res) => {
     try {
         const stage = await Stages.aggregate([{
-            $match: { projectId: req.params.id }
+            $match: { projectId: new mongoose.Types.ObjectId(req.params.id)}
         }]);
         if (!stage) {
             res.status(404);

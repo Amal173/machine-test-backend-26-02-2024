@@ -2,10 +2,33 @@ const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const users = require('../models/userModels');
+const mongoose = require('mongoose');
+const Project = require('../models/projectModels');
 
 const getUser = asyncHandler(async (req, res) => {
     try {
-        const user = await users.find();
+        let { search, id, projectid } = req.query;
+        const projects = await Project.aggregate([{ $match: { _id: new mongoose.Types.ObjectId(projectid) } },
+        { "$project": { "result": "$userId" } }]);
+        const User = new mongoose.Types.ObjectId(id)
+        let pipeline = [];
+        if (search) {
+            pipeline.push({
+                $match: {
+                    $or: [
+                        { username: { $regex: search, $options: 'i' } },
+                        { email: { $regex: search, $options: 'i' } },
+                    ]
+                }
+            });
+        }
+        pipeline.push({
+            $match: {
+                _id: { "$nin": [new mongoose.Types.ObjectId(projects[0]?.result), User] },
+                role: { "$nin": ["Admin"] }
+            }
+        });
+        const user = await users.aggregate(pipeline);
         if (!user) {
             res.status(404).json({ error: "user not found" });
         }

@@ -1,13 +1,14 @@
 const asyncHandler = require('express-async-handler');
 const task = require("../models/taskModels");
+const mongoose = require('mongoose');
 
 const getTask = asyncHandler(async (req, res) => {
     try {
         const tasks = await task.aggregate([{
-            $match: { projectId: req.params.id }
+            $match: { projectId: new mongoose.Types.ObjectId(req.params.id) }
         }]);
         
-        if (!tasks || tasks.length === 0) {
+        if (!tasks) {
             res.status(404);
             throw new Error("Tasks not found");
         }
