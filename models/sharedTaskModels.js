@@ -20,4 +20,4 @@ const SharedTaskSchema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('shared-task', SharedTaskSchema)
+module.exports = mongoose.model('shared-tasks', SharedTaskSchema)
