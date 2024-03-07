@@ -6,7 +6,7 @@ const { connectDb } = require("./config/dbConnection")
 connectDb()
 const app = express();
 app.use(cors({
-    origin: ["http://localhost:3000","https://machine-test-frontend-26-02-2024-gzxo.vercel.app"],
+    origin: ["http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 }))
